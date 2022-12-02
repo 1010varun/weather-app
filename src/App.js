@@ -44,7 +44,9 @@ const App = () => {
       ).then(({data}) => {
         toast.success("SUCCESSFULLY Fetched weather", {theme: 'dark'})
         setDatas(data);
-      }).catch(() => {
+          setCity("");
+          setCountry("");
+      }).catch((err) => {
         toast.error("ERROR, Please check & try again", { theme: "dark" });
       })
     } else{
