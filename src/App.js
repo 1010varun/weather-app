@@ -113,7 +113,7 @@ const App = () => {
           Get Tru Weather By Current Location
         </button>
       </div>
-
+  {temp &&
       <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
         <p className="d-flex flex-row">
           <BsThermometerHalf size={20} className="me-3" /> {temp} °C
@@ -131,6 +131,7 @@ const App = () => {
           <BsWind className="me-3" size={20} /> {windspeed}Km/h
         </p>
       </div>
+  }
       <ToastContainer/>
     </div>
   );
