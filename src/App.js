@@ -7,7 +7,8 @@ import { BiMap } from "react-icons/bi";
 import { FaSun } from "react-icons/fa";
 import {toast, ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
-
+ 
+import Toggle from './Toggle';
 const App = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
@@ -19,6 +20,11 @@ const App = () => {
   const [description, setDescription] = useState(0);
   const [name, setName] = useState(0);
   const [windspeed, setWindspeed] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const handleToggle = (value) => {
+    setIsDarkMode(value);
+  };
 
   const callbylatlon = async () => {
     if(latitude.length !== 0 && longitude.length !== 0){
@@ -75,8 +81,9 @@ const App = () => {
     }
   }, [datas]);
   return (
-    <div>
-      <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div>
+  
+    <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
+      <div className={`bg-${isDarkMode ? 'black' : 'white'} text-white p-3 lg:text-xl d-flex`}> <span style={{color:'red',fontWeight:'600'}}>tru Weather</span> <Toggle onToggle={handleToggle}  /> </div>
       <div className="d-flex flex-column gap-2 mt-5 mx-2">
         <input
           type="text"
