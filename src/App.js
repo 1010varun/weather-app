@@ -20,6 +20,31 @@ const App = () => {
   const [name, setName] = useState(0);
   const [windspeed, setWindspeed] = useState(0);
 
+    // const weatherURLs = {
+    //   clearsky: 'https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg',
+    //   partlycloudy: 'https://example.com/partly-cloudy-image.jpg',
+    //   'rainy': 'https://example.com/rainy-image.jpg',
+    //   'snowy': 'https://example.com/snowy-image.jpg',
+    //   // Add more descriptions and URLs as needed
+    // };
+
+    const determineweatherurl=()=>{
+      let imurl="https://www.survivingwithandroid.com/wp-content/uploads/2014/11/android_weather_app.jpg";  // default value
+
+      if(description.includes("clear")){ imurl="https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg"}
+      if(description.includes("thunderstorm")){ imurl="https://img.freepik.com/premium-photo/thunderstorm-with-lightnings-stormy-sky-city-dramatic-weather-background-digital-illustrati_124507-12857.jpg"}
+      if(description.includes("smoke")){ imurl="https://c0.wallpaperflare.com/preview/906/687/614/sky-clouds-nature-weather.jpg"}
+      if(description.includes("drizzle")){ imurl="https://media.istockphoto.com/id/1429701799/photo/raindrops-on-asphalt-rain-rainy-weather-downpour.webp?b=1&s=170667a&w=0&k=20&c=lXXWPQuhXI4xZRrr8d1uZGjQasuR-oRS1_GraXO9Fd0="}
+      if(description.includes("rain")){ imurl="https://img.freepik.com/free-photo/weather-effects-composition_23-2149853295.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1704931200&semt=ais"}
+      if(description.includes("snow")){ imurl="https://png.pngtree.com/background/20230525/original/pngtree-winter-scene-of-snow-covered-mountains-and-snowfall-picture-image_2729279.jpg"}
+      if(description.includes("clouds")){ imurl="https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg"}
+
+      // console.log("description:",description);
+      // console.log("check:",description.includes("smoke"));
+      // console.log("imurl:",imurl);
+      return imurl;
+    }
+
   const callbylatlon = async () => {
     if(latitude.length !== 0 && longitude.length !== 0){
       await Axios.get(
@@ -32,6 +57,11 @@ const App = () => {
         .catch(() => {
           toast.error("ERROR, Please check & try again", { theme: "dark" });
         });
+        
+        const igurl=determineweatherurl();
+        document.body.style.background = `#f3f3f3 url('${igurl}') no-repeat`;
+        document.body.style.backgroundSize='cover';
+
     } else{
       return toast.warn("Please Give location premission", { theme: "dark" });
     }
@@ -42,6 +72,7 @@ const App = () => {
       await Axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
       ).then(({data}) => {
+        setDescription(data.weather[0].description || ""); // Ensure description is a string
         toast.success("SUCCESSFULLY Fetched weather", {theme: 'dark'})
         setDatas(data);
           setCity("");
@@ -49,10 +80,46 @@ const App = () => {
       }).catch((err) => {
         toast.error("ERROR, Please check & try again", { theme: "dark" });
       })
+
+      // const word=description.split(' ');
+      // const word=description.split(' ');
+      // console.log("Description:", description);
+              // const word = description.split(' ');
+// console.log("word",word);
+      // console.log(word);
+              // const lef = word.join('').toString();
+      // console.log(lef);
+
+              // const bgurl = weatherURLs[lef];
+      // console.log("a",weatherURLs);
+      // console.log("b",weatherURLs.lef);
+   
+              // document.body.style.background = `#f3f3f3 url('${bgurl}') no-repeat`;
+              // document.body.style.backgroundSize='cover';
+              // console.log("Heeeelo");
+              // console.log("bgurl",bgurl);
+
+        const igurl=determineweatherurl();
+        document.body.style.background = `#f3f3f3 url('${igurl}') no-repeat`;
+        document.body.style.backgroundSize='cover';
+
     } else{
       return toast.warn("Please Enter Details !!",{theme: "dark"});
     }
   };
+
+  useEffect(() => {
+    if (description) {
+      // const word = description.split(' ');
+      // console.log(word);
+  
+      // const bgurl = weatherURLs[word.join('').toLowerCase()] || weatherURLs.default; // Use a default URL if not found
+      document.body.style.background = `#f3f3f3 url('${determineweatherurl(description)}') no-repeat`;
+      // console.log("bgurl", bgurl);
+              document.body.style.backgroundSize='cover';
+
+    }
+  }, [description]);
 
   const location = () => {
     navigator.geolocation.getCurrentPosition((position) => {
