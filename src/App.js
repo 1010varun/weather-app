@@ -7,8 +7,7 @@ import { BiMap } from "react-icons/bi";
 import { FaSun } from "react-icons/fa";
 import {toast, ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
- 
-import Toggle from './Toggle';
+import Toggle from './Toggle';//Added this file for toggle the background color 
 const App = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
