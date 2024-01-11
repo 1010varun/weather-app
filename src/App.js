@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { IoIosWater } from "react-icons/io";
-import { BsWind, BsThermometerHalf } from "react-icons/bs";
-import { BiMap } from "react-icons/bi";
-import { FaSun } from "react-icons/fa";
-import {toast, ToastContainer} from "react-toastify"
+import {
+  IoIosWater,
+  BsWind,
+  BsThermometerHalf,
+} from "react-icons/all";
+import { BiMap, FaSun } from "react-icons/all";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./App.css"; // Import your own CSS file for styling
 
 const App = () => {
   const [latitude, setLatitude] = useState("");
@@ -21,36 +24,40 @@ const App = () => {
   const [windspeed, setWindspeed] = useState(0);
 
   const callbylatlon = async () => {
-    if(latitude.length !== 0 && longitude.length !== 0){
-      await Axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
-      )
-        .then(({ data }) => {
-          toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
-          setDatas(data);
-        })
-        .catch(() => {
-          toast.error("ERROR, Please check & try again", { theme: "dark" });
-        });
-    } else{
-      return toast.warn("Please Give location premission", { theme: "dark" });
+    try {
+      if (latitude.length !== 0 && longitude.length !== 0) {
+        const { data } = await Axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
+        );
+        toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
+        setDatas(data);
+      } else {
+        toast.warn("Please Give location premission", { theme: "dark" });
+      }
+    } catch (error) {
+      toast.error("ERROR: Unable to fetch weather data. Please try again.", {
+        theme: "dark",
+      });
     }
   };
 
   const callbyname = async () => {
-    if (city.length !== 0 && country.length !== 0) {
-      await Axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
-      ).then(({data}) => {
-        toast.success("SUCCESSFULLY Fetched weather", {theme: 'dark'})
+    try {
+      if (city.length !== 0 && country.length !== 0) {
+        const { data } = await Axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
+        );
+        toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
         setDatas(data);
-          setCity("");
-          setCountry("");
-      }).catch((err) => {
-        toast.error("ERROR, Please check & try again", { theme: "dark" });
-      })
-    } else{
-      return toast.warn("Please Enter Details !!",{theme: "dark"});
+        setCity("");
+        setCountry("");
+      } else {
+        toast.warn("Please Enter Details !!", { theme: "dark" });
+      }
+    } catch (error) {
+      toast.error("ERROR: Unable to fetch weather data. Please try again.", {
+        theme: "dark",
+      });
     }
   };
 
@@ -67,13 +74,15 @@ const App = () => {
 
   useEffect(() => {
     if (Object.keys(datas).length > 0) {
-      setTemp(Math.ceil(datas.main?.temp - 273));
-      setHumidity(datas.main?.humidity);
+      const { main, weather, wind } = datas;
+      setTemp(Math.ceil(main?.temp - 273));
+      setHumidity(main?.humidity);
       setName(datas.name);
-      setDescription(datas.weather[0].description);
-      setWindspeed(datas.wind?.speed);
+      setDescription(weather[0].description);
+      setWindspeed(wind?.speed);
     }
   }, [datas]);
+
   return (
     <div>
       <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div>
@@ -113,26 +122,26 @@ const App = () => {
           Get Tru Weather By Current Location
         </button>
       </div>
-  {temp &&
-      <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
-        <p className="d-flex flex-row">
-          <BsThermometerHalf size={20} className="me-3" /> {temp} °C
-        </p>
-        <p className="d-flex flex-row">
-          <IoIosWater size={20} className="me-3" /> {humidity} %
-        </p>
-        <p className="d-flex flex-row">
-          <FaSun className="me-3" size={20} /> {description}
-        </p>
-        <p className="d-flex flex-row">
-          <BiMap className="me-3" size={20} /> {name}
-        </p>
-        <p className="d-flex flex-row">
-          <BsWind className="me-3" size={20} /> {windspeed}Km/h
-        </p>
-      </div>
-  }
-      <ToastContainer/>
+      {temp && (
+        <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
+          <p className="d-flex flex-row">
+            <BsThermometerHalf size={20} className="me-3" /> {temp} °C
+          </p>
+          <p className="d-flex flex-row">
+            <IoIosWater size={20} className="me-3" /> {humidity} %
+          </p>
+          <p className="d-flex flex-row">
+            <FaSun className="me-3" size={20} /> {description}
+          </p>
+          <p className="d-flex flex-row">
+            <BiMap className="me-3" size={20} /> {name}
+          </p>
+          <p className="d-flex flex-row">
+            <BsWind className="me-3" size={20} /> {windspeed} Km/h
+          </p>
+        </div>
+      )}
+      <ToastContainer />
     </div>
   );
 };
