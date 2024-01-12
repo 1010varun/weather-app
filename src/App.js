@@ -5,8 +5,12 @@ import { IoIosWater } from "react-icons/io";
 import { BsWind, BsThermometerHalf } from "react-icons/bs";
 import { BiMap } from "react-icons/bi";
 import { FaSun } from "react-icons/fa";
-import {toast, ToastContainer} from "react-toastify"
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+
+import "leaflet/dist/leaflet.css";
+import { Modal, Button } from "react-bootstrap";
 
 const App = () => {
   const [latitude, setLatitude] = useState("");
@@ -19,107 +23,75 @@ const App = () => {
   const [description, setDescription] = useState(0);
   const [name, setName] = useState(0);
   const [windspeed, setWindspeed] = useState(0);
+  const [showWorldMap, setShowWorldMap] = useState(false);
+  const [clickedLocation, setClickedLocation] = useState(null);
 
-    // const weatherURLs = {
-    //   clearsky: 'https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg',
-    //   partlycloudy: 'https://example.com/partly-cloudy-image.jpg',
-    //   'rainy': 'https://example.com/rainy-image.jpg',
-    //   'snowy': 'https://example.com/snowy-image.jpg',
-    //   // Add more descriptions and URLs as needed
-    // };
+  const handleCloseWorldMap = () => setShowWorldMap(false);
+  const handleShowWorldMap = () => setShowWorldMap(true);
 
-    const determineweatherurl=()=>{
-      let imurl="https://www.survivingwithandroid.com/wp-content/uploads/2014/11/android_weather_app.jpg";  // default value
+  const handleMapClick = async (e) => {
+    const { lat, lng } = e.latlng;
 
-      if(description.includes("clear")){ imurl="https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg"}
-      if(description.includes("thunderstorm")){ imurl="https://img.freepik.com/premium-photo/thunderstorm-with-lightnings-stormy-sky-city-dramatic-weather-background-digital-illustrati_124507-12857.jpg"}
-      if(description.includes("smoke")){ imurl="https://c0.wallpaperflare.com/preview/906/687/614/sky-clouds-nature-weather.jpg"}
-      if(description.includes("drizzle")){ imurl="https://media.istockphoto.com/id/1429701799/photo/raindrops-on-asphalt-rain-rainy-weather-downpour.webp?b=1&s=170667a&w=0&k=20&c=lXXWPQuhXI4xZRrr8d1uZGjQasuR-oRS1_GraXO9Fd0="}
-      if(description.includes("rain")){ imurl="https://img.freepik.com/free-photo/weather-effects-composition_23-2149853295.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1704931200&semt=ais"}
-      if(description.includes("snow")){ imurl="https://png.pngtree.com/background/20230525/original/pngtree-winter-scene-of-snow-covered-mountains-and-snowfall-picture-image_2729279.jpg"}
-      if(description.includes("clouds")){ imurl="https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg"}
+    try {
+      const { data } = await Axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
+      );
 
-      // console.log("description:",description);
-      // console.log("check:",description.includes("smoke"));
-      // console.log("imurl:",imurl);
-      return imurl;
+      toast.success(`Weather in clicked location: ${data.weather[0].description}`, {
+        theme: "dark",
+      });
+    } catch (error) {
+      console.error("Error fetching weather for clicked location:", error);
+      toast.error("Unable to fetch weather data for clicked location. Please try again.", {
+        theme: "dark",
+      });
     }
 
-  const callbylatlon = async () => {
-    if(latitude.length !== 0 && longitude.length !== 0){
-      await Axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
-      )
-        .then(({ data }) => {
-          toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
-          setDatas(data);
-        })
-        .catch(() => {
-          toast.error("ERROR, Please check & try again", { theme: "dark" });
-        });
-        
-        const igurl=determineweatherurl();
-        document.body.style.background = `#f3f3f3 url('${igurl}') no-repeat`;
-        document.body.style.backgroundSize='cover';
+    setClickedLocation({ lat, lng });
+  };
 
-    } else{
+  const callbylatlon = async () => {
+    if (latitude.length !== 0 && longitude.length !== 0) {
+      try {
+        const { data } = await Axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
+        );
+        toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
+        setDatas(data);
+      } catch (error) {
+        toast.error("ERROR, Please check & try again", { theme: "dark" });
+      }
+
+      const igurl = determineweatherurl();
+      document.body.style.background = `#f3f3f3 url('${igurl}') no-repeat`;
+      document.body.style.backgroundSize = "cover";
+    } else {
       return toast.warn("Please Give location premission", { theme: "dark" });
     }
   };
 
   const callbyname = async () => {
     if (city.length !== 0 && country.length !== 0) {
-      await Axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
-      ).then(({data}) => {
+      try {
+        const { data } = await Axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
+        );
         setDescription(data.weather[0].description || ""); // Ensure description is a string
-        toast.success("SUCCESSFULLY Fetched weather", {theme: 'dark'})
+        toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
         setDatas(data);
-          setCity("");
-          setCountry("");
-      }).catch((err) => {
+        setCity("");
+        setCountry("");
+      } catch (err) {
         toast.error("ERROR, Please check & try again", { theme: "dark" });
-      })
+      }
 
-      // const word=description.split(' ');
-      // const word=description.split(' ');
-      // console.log("Description:", description);
-              // const word = description.split(' ');
-// console.log("word",word);
-      // console.log(word);
-              // const lef = word.join('').toString();
-      // console.log(lef);
-
-              // const bgurl = weatherURLs[lef];
-      // console.log("a",weatherURLs);
-      // console.log("b",weatherURLs.lef);
-   
-              // document.body.style.background = `#f3f3f3 url('${bgurl}') no-repeat`;
-              // document.body.style.backgroundSize='cover';
-              // console.log("Heeeelo");
-              // console.log("bgurl",bgurl);
-
-        const igurl=determineweatherurl();
-        document.body.style.background = `#f3f3f3 url('${igurl}') no-repeat`;
-        document.body.style.backgroundSize='cover';
-
-    } else{
-      return toast.warn("Please Enter Details !!",{theme: "dark"});
+      const igurl = determineweatherurl();
+      document.body.style.background = `#f3f3f3 url('${igurl}') no-repeat`;
+      document.body.style.backgroundSize = "cover";
+    } else {
+      return toast.warn("Please Enter Details !!", { theme: "dark" });
     }
   };
-
-  useEffect(() => {
-    if (description) {
-      // const word = description.split(' ');
-      // console.log(word);
-  
-      // const bgurl = weatherURLs[word.join('').toLowerCase()] || weatherURLs.default; // Use a default URL if not found
-      document.body.style.background = `#f3f3f3 url('${determineweatherurl(description)}') no-repeat`;
-      // console.log("bgurl", bgurl);
-              document.body.style.backgroundSize='cover';
-
-    }
-  }, [description]);
 
   const location = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -141,6 +113,43 @@ const App = () => {
       setWindspeed(datas.wind?.speed);
     }
   }, [datas]);
+
+  const determineweatherurl = () => {
+    let imurl =
+      "https://www.survivingwithandroid.com/wp-content/uploads/2014/11/android_weather_app.jpg"; // default value
+
+    if (description.includes("clear")) {
+      imurl =
+        "https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg";
+    }
+    if (description.includes("thunderstorm")) {
+      imurl =
+        "https://img.freepik.com/premium-photo/thunderstorm-with-lightnings-stormy-sky-city-dramatic-weather-background-digital-illustrati_124507-12857.jpg";
+    }
+    if (description.includes("smoke")) {
+      imurl =
+        "https://c0.wallpaperflare.com/preview/906/687/614/sky-clouds-nature-weather.jpg";
+    }
+    if (description.includes("drizzle")) {
+      imurl =
+        "https://media.istockphoto.com/id/1429701799/photo/raindrops-on-asphalt-rain-rainy-weather-downpour.webp?b=1&s=170667a&w=0&k=20&c=lXXWPQuhXI4xZRrr8d1uZGjQasuR-oRS1_GraXO9Fd0=";
+    }
+    if (description.includes("rain")) {
+      imurl =
+        "https://img.freepik.com/free-photo/weather-effects-composition_23-2149853295.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1704931200&semt=ais";
+    }
+    if (description.includes("snow")) {
+      imurl =
+        "https://png.pngtree.com/background/20230525/original/pngtree-winter-scene-of-snow-covered-mountains-and-snowfall-picture-image_2729279.jpg";
+    }
+    if (description.includes("clouds")) {
+      imurl =
+        "https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg";
+    }
+
+    return imurl;
+  };
+
   return (
     <div>
       <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div>
@@ -179,27 +188,63 @@ const App = () => {
         >
           Get Tru Weather By Current Location
         </button>
+        <button
+          type="button"
+          className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mx-auto mb-2 focus:outline-none"
+          onClick={handleShowWorldMap}
+        >
+          World
+        </button>
       </div>
-  {temp &&
-      <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
-        <p className="d-flex flex-row">
-          <BsThermometerHalf size={20} className="me-3" /> {temp} °C
-        </p>
-        <p className="d-flex flex-row">
-          <IoIosWater size={20} className="me-3" /> {humidity} %
-        </p>
-        <p className="d-flex flex-row">
-          <FaSun className="me-3" size={20} /> {description}
-        </p>
-        <p className="d-flex flex-row">
-          <BiMap className="me-3" size={20} /> {name}
-        </p>
-        <p className="d-flex flex-row">
-          <BsWind className="me-3" size={20} /> {windspeed}Km/h
-        </p>
-      </div>
-  }
-      <ToastContainer/>
+      {temp && (
+        <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
+          <p className="d-flex flex-row">
+            <BsThermometerHalf size={20} className="me-3" /> {temp} °C
+          </p>
+          <p className="d-flex flex-row">
+            <IoIosWater size={20} className="me-3" /> {humidity} %
+          </p>
+          <p className="d-flex flex-row">
+            <FaSun className="me-3" size={20} /> {description}
+          </p>
+          <p className="d-flex flex-row">
+            <BiMap className="me-3" size={20} /> {name}
+          </p>
+          <p className="d-flex flex-row">
+            <BsWind className="me-3" size={20} /> {windspeed}Km/h
+          </p>
+        </div>
+      )}
+      <ToastContainer />
+
+      <Modal show={showWorldMap} onHide={handleCloseWorldMap} size="xl">
+        <Modal.Header closeButton>
+          <Modal.Title>World Map</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <MapContainer
+            center={[0, 0]}
+            zoom={2}
+            style={{ height: "500px", width: "100%" }}
+            onClick={handleMapClick}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {clickedLocation && (
+              <Marker position={[clickedLocation.lat, clickedLocation.lng]}>
+                <Popup>Clicked Location</Popup>
+              </Marker>
+            )}
+          </MapContainer>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseWorldMap}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
