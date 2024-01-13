@@ -29,7 +29,7 @@ const App = () => {
     // };
 
     const determineweatherurl=()=>{
-      let imurl="https://www.survivingwithandroid.com/wp-content/uploads/2014/11/android_weather_app.jpg";  // default value
+      let imurl="https://png.pngtree.com/background/20230427/original/pngtree-clouds-above-a-bright-sky-picture-image_2494866.jpg";  // default value
 
       if(description.includes("clear")){ imurl="https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg"}
       if(description.includes("thunderstorm")){ imurl="https://img.freepik.com/premium-photo/thunderstorm-with-lightnings-stormy-sky-city-dramatic-weather-background-digital-illustrati_124507-12857.jpg"}
