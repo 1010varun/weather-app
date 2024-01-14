@@ -19,7 +19,7 @@ const App = () => {
   const [description, setDescription] = useState(0);
   const [name, setName] = useState(0);
   const [windspeed, setWindspeed] = useState(0);
-
+  const [theme, setTheme] = useState("light")
     // const weatherURLs = {
     //   clearsky: 'https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg',
     //   partlycloudy: 'https://example.com/partly-cloudy-image.jpg',
@@ -28,6 +28,13 @@ const App = () => {
     //   // Add more descriptions and URLs as needed
     // };
 
+    const modechange =()=>{
+      if(theme==="dark"){
+       setTheme("light")
+      }else{
+       setTheme("dark")
+      }
+   }
     const determineweatherurl=()=>{
       let imurl="https://www.survivingwithandroid.com/wp-content/uploads/2014/11/android_weather_app.jpg";  // default value
 
@@ -143,13 +150,24 @@ const App = () => {
   }, [datas]);
   return (
     <div>
-      <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div>
-      <div className="d-flex flex-column gap-2 mt-5 mx-2">
+      <div className="bg-black text-white p-1 lg:text-xl">
+    <h1 className="d-inline-block">True Weather</h1>
+    <div className="form-check form-switch float-right mr-8 mt-2.5">
+        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={modechange}/>
+        <label className="form-check-label" for="flexSwitchCheckDefault">{`Enable ${theme==='dark'?'light':'dark'}`} Mode</label>
+    </div>
+    </div>
+
+      
+      <div className={`d-flex flex-column gap-2 mt-5 mx-2 `}>
         <input
           type="text"
           placeholder="Enter City Name"
           value={city}
-          className="w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12"
+          className={`w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12 ${
+            theme === 'dark'
+              ? 'bg-gray-700 text-white dark:border-gray-700 dark:hover:bg-blue-800'
+              : 'bg-white text-black'}`}
           onChange={(e) => {
             setCity(e.target.value);
           }}
@@ -158,7 +176,10 @@ const App = () => {
           type="text"
           placeholder="Enter Country Name"
           value={country}
-          className="w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12"
+          className={`w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12 ${
+            theme === 'dark'
+              ? 'bg-gray-700 text-white dark:border-gray-700 dark:hover:bg-blue-800'
+              : 'bg-white text-black'}`}
           onChange={(e) => {
             setCountry(e.target.value);
           }}
@@ -167,38 +188,45 @@ const App = () => {
       <div className="mt-4 mx-2 d-flex flex-column">
         <button
           type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mb-2 focus:outline-none mx-auto"
+          className={`text-white ${theme==="dark"?'bg-blue-900':'bg-blue-700'} hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mb-2 focus:outline-none mx-auto`}
           onClick={callbyname}
         >
           Get Tru Weather By City Name
         </button>
         <button
           type="button"
-          className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mx-auto mb-2 focus:outline-none"
+          className={`text-white ${theme === 'dark'?'bg-green-900':'bg-green-700'} hover:bg-green-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mx-auto mb-2 focus:outline-none1`}
           onClick={callbylatlon}
         >
           Get Tru Weather By Current Location
         </button>
       </div>
-  {temp &&
-      <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
-        <p className="d-flex flex-row">
-          <BsThermometerHalf size={20} className="me-3" /> {temp} °C
-        </p>
-        <p className="d-flex flex-row">
-          <IoIosWater size={20} className="me-3" /> {humidity} %
-        </p>
-        <p className="d-flex flex-row">
-          <FaSun className="me-3" size={20} /> {description}
-        </p>
-        <p className="d-flex flex-row">
-          <BiMap className="me-3" size={20} /> {name}
-        </p>
-        <p className="d-flex flex-row">
-          <BsWind className="me-3" size={20} /> {windspeed}Km/h
-        </p>
-      </div>
-  }
+      {temp && (
+  <div
+    className={`block w-9/12 p-6 border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5 ${
+      theme === 'dark'
+        ? ' bg-gray-700 text-white dark:border-gray-700 dark:hover:bg-blue-800'
+        : 'bg-white text-black'
+    }`}
+  >
+    <p className="d-flex flex-row">
+      <BsThermometerHalf size={20} className="me-3" /> {temp} °C
+    </p>
+    <p className="d-flex flex-row">
+      <IoIosWater size={20} className="me-3" /> {humidity} %
+    </p>
+    <p className="d-flex flex-row">
+      <FaSun className="me-3" size={20} /> {description}
+    </p>
+    <p className="d-flex flex-row">
+      <BiMap className="me-3" size={20} /> {name}
+    </p>
+    <p className="d-flex flex-row">
+      <BsWind className="me-3" size={20} /> {windspeed}Km/h
+    </p>
+  </div>
+)}
+
       <ToastContainer/>
     </div>
   );
