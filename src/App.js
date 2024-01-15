@@ -155,7 +155,7 @@ const App = () => {
     }
   }, [datas]);
   return (
-    <div>
+    <div className="w-screen h-screen overflow-hidden">
       <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div>
       <div className="d-flex flex-column gap-2 mt-5 mx-2">
         <input
