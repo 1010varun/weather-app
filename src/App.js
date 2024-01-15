@@ -115,6 +115,12 @@ const App = () => {
     }
   };
 
+  const handleKeyStroke= (e) => {
+    if (e.keyCode === 13) {
+      callbyname();
+    }
+  };
+
   useEffect(() => {
     if (description) {
       // const word = description.split(' ');
@@ -157,6 +163,7 @@ const App = () => {
           placeholder="Enter City Name"
           value={city}
           className="w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12"
+          onKeyDown={handleKeyStroke}
           onChange={(e) => {
             setCity(e.target.value);
           }}
@@ -166,6 +173,7 @@ const App = () => {
           placeholder="Enter Country Name"
           value={country}
           className="w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12"
+          onKeyDown={handleKeyStroke}
           onChange={(e) => {
             setCountry(e.target.value);
           }}
