@@ -151,7 +151,7 @@ const App = () => {
   return (
     <div>
       <div className="bg-black text-white p-1 lg:text-xl">
-    <h1 className="d-inline-block">True Weather</h1>
+    <h1 className="d-inline-block">Tru Weather</h1>
     <div className="form-check form-switch float-right mr-8 mt-2.5">
         <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={modechange}/>
         <label className="form-check-label" for="flexSwitchCheckDefault">{`Enable ${theme==='dark'?'light':'dark'}`} Mode</label>
