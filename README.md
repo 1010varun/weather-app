@@ -62,7 +62,7 @@ webpack compiled successfully
 
 Contributions are always welcome!
 
-See [`contributing.md`](/Contributions.md) for ways to get started.
+See [`contributions.md`](/Contributions.md) for ways to get started.
 
 ## Support++
 
