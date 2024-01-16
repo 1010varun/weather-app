@@ -229,25 +229,47 @@ const App = () => {
           Get Tru Weather By Current Location
         </button>
       </div>
+
       {!!temp && (
-        <div className='block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5'>
-          <p className='d-flex flex-row'>
-            <BsThermometerHalf size={20} className='me-3' /> {temp} °C
-          </p>
-          <p className='d-flex flex-row'>
-            <IoIosWater size={20} className='me-3' /> {humidity} %
-          </p>
-          <p className='d-flex flex-row'>
-            <FaSun className='me-3' size={20} /> {description}
-          </p>
-          <p className='d-flex flex-row'>
-            <BiMap className='me-3' size={20} /> {name}
-          </p>
-          <p className='d-flex flex-row'>
-            <BsWind className='me-3' size={20} /> {windspeed}Km/h
-          </p>
+        <div className='rounded-lg overflow-hidden bg-gradient-to-r from-blue-500 to-purple-500 border border-gray-200 shadow-md mx-auto mt-5 w-3/4 sm:w-3/5 lg:w-2/5 p-4 transform transition-transform hover:scale-105 transition duration-300 ease-in-out'>
+          <div className='text-white text-center mb-4'>
+            <h2 className='text-lg font-semibold'>Weather Details</h2>
+          </div>
+          <div className='grid grid-cols-2 gap-4'>
+            <div className='flex items-center text-white'>
+              <div className='icon-circle bg-blue-700'>
+                <BsThermometerHalf size={30} className='icon' />
+              </div>
+              <span className='ml-2'>Temperature: {temp} °C</span>
+            </div>
+            <div className='flex items-center text-white'>
+              <div className='icon-circle bg-green-700'>
+                <IoIosWater size={30} className='icon' />
+              </div>
+              <span className='ml-2'>Humidity: {humidity} %</span>
+            </div>
+            <div className='flex items-center text-white'>
+              <div className='icon-circle bg-yellow-500'>
+                <FaSun size={30} className='icon' />
+              </div>
+              <span className='ml-2'>Weather: {description}</span>
+            </div>
+            <div className='flex items-center text-white'>
+              <div className='icon-circle bg-pink-500'>
+                <BiMap size={30} className='icon' />
+              </div>
+              <span className='ml-2'>Location: {name}</span>
+            </div>
+            <div className='flex items-center text-white'>
+              <div className='icon-circle bg-purple-500'>
+                <BsWind size={30} className='icon' />
+              </div>
+              <span className='ml-2'>Wind Speed: {windspeed} Km/h</span>
+            </div>
+          </div>
         </div>
       )}
+
       <ToastContainer />
     </div>
   );
