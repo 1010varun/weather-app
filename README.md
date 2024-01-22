@@ -72,5 +72,16 @@ Don't forget to leave a star ⭐️
 [![forthebadge made-with-javascript](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://www.javascript.com/)  [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
 
+
+ ## Our Amazing Contributors 
+
+
+<a align="center" href="https://github.com/1010varun/weather-app/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=1010varun/weather-app" />  
+</a>
+
+
+
+
 ##
 Made with ❤ by varun ([@1010varun](https://github.com/1010varun))
