@@ -8,6 +8,8 @@ import { FaSun } from "react-icons/fa";
 import {toast, ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./footer";
+import Navbar from './Navbar';
+
 const App = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
@@ -19,6 +21,45 @@ const App = () => {
   const [description, setDescription] = useState(0);
   const [name, setName] = useState(0);
   const [windspeed, setWindspeed] = useState(0);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const [mode, setMode] = useState('light'); //Whether darkmode is enabled or not
+
+  const toggleMode=()=>{
+    if(mode==='light'){
+      setMode('dark');
+      document.getElementById('inp1').style.backgroundColor='#212529';
+      document.getElementById('inp2').style.backgroundColor='#212529';
+      document.getElementById('navbar').style.backgroundColor='#333333';
+      document.getElementById('footer').style.backgroundColor='#333333';
+      document.body.style.backgroundColor='#212529';
+
+document.getElementById('inp1').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+document.getElementById('inp2').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+document.getElementById('navbar').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+document.getElementById('footer').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+document.getElementById('b1').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+document.getElementById('b2').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+document.body.style.filter="brightness(80%)"
+
+    }
+    else if(mode==='dark'){
+      setMode('light');
+      document.body.style.backgroundColor='white';
+      document.getElementById('inp1').style.backgroundColor='white';
+      document.getElementById('inp2').style.backgroundColor='white';
+      document.getElementById('navbar').style.backgroundColor='#8250DF';
+      document.getElementById('footer').style.backgroundColor='#8250DF';
+
+      document.getElementById('inp1').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
+      document.getElementById('inp2').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
+      document.getElementById('navbar').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
+      document.getElementById('footer').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
+      document.getElementById('b1').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
+      document.getElementById('b2').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
+      document.body.style.filter="brightness(100%)"
+    }
+  }
 
     // const weatherURLs = {
     //   clearsky: 'https://t4.ftcdn.net/jpg/05/79/25/43/360_F_579254301_VQ75mtrG9AP45Txrd76TG2xatiBqqms2.jpg',
@@ -121,6 +162,38 @@ const App = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setCity(inputValue);
+    if (!inputValue) {
+      setSuggestions([]);
+      return;
+    }
+    getSuggestions(inputValue);
+    var val = document.getElementById("inp1").value;
+    var opts = document.getElementById('suggestions').children;
+    const selectedOption = Array.from(opts).find(option => option.value === val);
+    if (selectedOption) {
+      const [city, country] = selectedOption.value.split("(").map(item => item.trim().toLowerCase().replace(/\)/g, ''));
+      setCity(city);
+      setCountry(country);
+    }
+  };
+  
+  const getSuggestions = async (input) => {
+    try {
+      const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(input)}`);
+      const data = await response.json();
+      if (data.results) {
+        setSuggestions(data.results);
+      } else {
+        console.error('Error fetching suggestions: No results found in the response.');
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+    }
+  };
+
   useEffect(() => {
     if (description) {
       // const word = description.split(' ');
@@ -156,16 +229,19 @@ const App = () => {
   }, [datas]);
   return (
     <div className="w-full min-h-screen overflow-hidden">
-      <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div>
+      {/* <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div> */}
+      <Navbar mode={mode} toggleMode={toggleMode}
       <div className="d-flex flex-column gap-2 mt-5 mx-2">
         <input
           type="text"
           placeholder="Enter City Name"
           value={city}
           className="w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12"
+          id="inp1"
+          list="suggestions"
           onKeyDown={handleKeyStroke}
           onChange={(e) => {
-            setCity(e.target.value);
+            handleInputChange(e);
           }}
         />
         <input
@@ -173,22 +249,30 @@ const App = () => {
           placeholder="Enter Country Name"
           value={country}
           className="w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12"
+          id="inp2"
           onKeyDown={handleKeyStroke}
           onChange={(e) => {
             setCountry(e.target.value);
           }}
         />
+        <datalist id="suggestions" >
+          {suggestions.map((suggestion, index) => (
+            <option key={index} value={`${suggestion.name} (${suggestion.country})`} />
+          ))}
+        </datalist>
       </div>
       <div className="mt-3 mx-2 d-flex flex-column">
         <button
           type="button"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mb-2 focus:outline-none mx-auto"
           onClick={callbyname}
+          id="b1"
         >
           Get Tru Weather By City Name
         </button>
         <button
           type="button"
+          id="b2"
           className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mx-auto mb-2 focus:outline-none"
           onClick={callbylatlon}
         >
