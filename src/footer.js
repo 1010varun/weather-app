@@ -2,14 +2,14 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer style={footerStyle}>
+    <footer id='footer' style={footerStyle}>
       <p> Made with ❤️ by &copy;1010varun</p>
     </footer>
   );
 };
 
 const footerStyle = {
-  backgroundColor: 'black',
+  backgroundColor: '#8250DF',
   color:'white',
   padding: '1rem',
   textAlign: 'center',
