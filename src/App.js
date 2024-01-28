@@ -21,7 +21,7 @@ const App = () => {
   const [description, setDescription] = useState(0);
   const [name, setName] = useState(0);
   const [windspeed, setWindspeed] = useState(0);
-
+  const [suggestions, setSuggestions] = useState([]);
 
   const [mode, setMode] = useState('light'); //Whether darkmode is enabled or not
 
@@ -162,6 +162,38 @@ document.body.style.filter="brightness(80%)"
     }
   };
 
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setCity(inputValue);
+    if (!inputValue) {
+      setSuggestions([]);
+      return;
+    }
+    getSuggestions(inputValue);
+    var val = document.getElementById("inp1").value;
+    var opts = document.getElementById('suggestions').children;
+    const selectedOption = Array.from(opts).find(option => option.value === val);
+    if (selectedOption) {
+      const [city, country] = selectedOption.value.split("(").map(item => item.trim().toLowerCase().replace(/\)/g, ''));
+      setCity(city);
+      setCountry(country);
+    }
+  };
+  
+  const getSuggestions = async (input) => {
+    try {
+      const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(input)}`);
+      const data = await response.json();
+      if (data.results) {
+        setSuggestions(data.results);
+      } else {
+        console.error('Error fetching suggestions: No results found in the response.');
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+    }
+  };
+
   useEffect(() => {
     if (description) {
       // const word = description.split(' ');
@@ -206,9 +238,10 @@ document.body.style.filter="brightness(80%)"
           value={city}
           className="w-10/12 p-2 rounded-lg mx-auto sm:w-8/12 md:w-6/12 lg:w-5/12"
           id="inp1"
+          list="suggestions"
           onKeyDown={handleKeyStroke}
           onChange={(e) => {
-            setCity(e.target.value);
+            handleInputChange(e);
           }}
         />
         <input
@@ -222,6 +255,11 @@ document.body.style.filter="brightness(80%)"
             setCountry(e.target.value);
           }}
         />
+        <datalist id="suggestions" >
+          {suggestions.map((suggestion, index) => (
+            <option key={index} value={`${suggestion.name} (${suggestion.country})`} />
+          ))}
+        </datalist>
       </div>
       <div className="mt-4 mx-2 d-flex flex-column">
         <button
