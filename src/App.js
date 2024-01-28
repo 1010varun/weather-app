@@ -40,13 +40,7 @@ document.getElementById('navbar').style.boxShadow="#C68801 0px 50px 100px -20px,
 document.getElementById('footer').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
 document.getElementById('b1').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
 document.getElementById('b2').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
-
-
 document.body.style.filter="brightness(80%)"
-
-// document.getElementById('navbar').style.boxShadow="#C68801 0px 50px 100px -20px,#C68801 0px 30px 60px -30px"
-
-
 
     }
     else if(mode==='dark'){
