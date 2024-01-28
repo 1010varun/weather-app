@@ -155,7 +155,7 @@ const App = () => {
     }
   }, [datas]);
   return (
-    <div className="w-screen h-screen overflow-hidden">
+    <div className="w-full min-h-screen overflow-hidden">
       <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div>
       <div className="d-flex flex-column gap-2 mt-5 mx-2">
         <input
@@ -179,7 +179,7 @@ const App = () => {
           }}
         />
       </div>
-      <div className="mt-4 mx-2 d-flex flex-column">
+      <div className="mt-3 mx-2 d-flex flex-column">
         <button
           type="button"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-sm rounded-lg px-5 py-2.5 mb-2 focus:outline-none mx-auto"
@@ -196,7 +196,7 @@ const App = () => {
         </button>
       </div>
   {!!temp &&
-      <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
+      <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-2">
         <p className="d-flex flex-row">
           <BsThermometerHalf size={20} className="me-3" /> {temp} °C
         </p>
@@ -215,7 +215,7 @@ const App = () => {
       </div>
   }
       <ToastContainer/>
-      <Footer />
+      {temp ? <Footer /> : <Footer position="fixed" bottom="bottom-0" />}
     </div>
   );
 };
