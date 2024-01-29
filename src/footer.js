@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Footer = () => {
+const Footer = (props) => {
   return (
-    <footer id='footer' style={footerStyle}>
+    <footer id='footer' style={footerStyle} className={`${props.bottom} ${props.position}`}>
       <p> Made with ❤️ by &copy;1010varun</p>
     </footer>
   );
@@ -13,8 +13,6 @@ const footerStyle = {
   color:'white',
   padding: '1rem',
   textAlign: 'center',
-  position: 'fixed',
-  bottom: 0,
   width: '100%',
 };
 

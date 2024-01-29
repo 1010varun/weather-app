@@ -228,7 +228,7 @@ document.body.style.filter="brightness(80%)"
     }
   }, [datas]);
   return (
-    <div className="w-screen h-screen overflow-hidden">
+    <div className="w-full min-h-screen overflow-hidden">
       {/* <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div> */}
       <Navbar mode={mode} toggleMode={toggleMode} />
       <div className="d-flex flex-column gap-2 mt-5 mx-2">
@@ -299,7 +299,7 @@ document.body.style.filter="brightness(80%)"
       </div>
   }
       <ToastContainer/>
-      <Footer />
+      {temp ? <Footer /> : <Footer position="fixed" bottom="bottom-0" />}
     </div>
   );
 };
