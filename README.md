@@ -1,6 +1,6 @@
 # tru Weather
 
-This is an app used to featch the current weather of user's current location or by the location eneterd by the user.
+This is an app used to fetch the current weather of the user's current location or the location entered by the user.
 
 [![GitHub issues](https://img.shields.io/github/issues/1010varun/weather-app)](https://github.com/1010varun/weather-app/issues)
 [![GitHub forks](https://img.shields.io/github/forks/1010varun/weather-app)](https://github.com/1010varun/weather-app/network)
@@ -28,7 +28,7 @@ Install node requirements
 ```bash
 npm i
 ```
-Run the developement server with 
+Run the development server with 
 
 ```bash
 npm start
@@ -49,19 +49,20 @@ webpack compiled successfully
 ```
 ## Tech Stack
 
-**Client:** HTML , CSS , Javascript , Tailwind CSS
+**Client:** HTML, CSS, JavaScript, Tailwind CSS
 
-**Server:** node , Javascript
+**Server:** node, JavaScript
 
 ## Features
 
 - Search weather of user's current location
 - or Searches by the location given by the user
+
 ## Contributing
 
 Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
+See [`contributions.md`](/Contributions.md) for ways to get started.
 
 ## Support++
 
@@ -69,6 +70,17 @@ This project needs your shiny star ⭐.
 Don't forget to leave a star ⭐️
 
 [![forthebadge made-with-javascript](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://www.javascript.com/)  [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+
+
+
+ ## Our Amazing Contributors 
+
+
+<a align="center" href="https://github.com/1010varun/weather-app/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=1010varun/weather-app" />  
+</a>
+
+
 
 
 ##

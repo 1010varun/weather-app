@@ -1,6 +1,18 @@
 body{
-    background: url("https://www.survivingwithandroid.com/wp-content/uploads/2014/11/android_weather_app.jpg");
+    background: url("https://png.pngtree.com/background/20230427/original/pngtree-clouds-above-a-bright-sky-picture-image_2494866.jpg");
     background-repeat: no-repeat;
-    /* background-size: auto; */
+    background-size: cover;
 
 }
+
+@media only screen and (max-width: 600px) {
+    #toggle-label {
+      display: none;
+      }
+      .container{
+        flex-wrap: nowrap !important;
+      }
+      .container span{
+        margin-left: 0px !important;
+      }
+  }
