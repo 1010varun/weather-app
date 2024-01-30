@@ -24,33 +24,39 @@ const App = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const [mode, setMode] = useState('light'); //Whether darkmode is enabled or not
+  const darkTheme = localStorage.getItem("theme");
 
   const toggleMode=()=>{
     if(mode==='light'){
       setMode('dark');
+      localStorage.setItem("theme", true);
       document.getElementById('inp1').style.backgroundColor='#212529';
       document.getElementById('inp2').style.backgroundColor='#212529';
+      document.getElementById('inp1').style.color = 'white';
+      document.getElementById('inp2').style.color = 'white';
       document.getElementById('navbar').style.backgroundColor='#333333';
       document.getElementById('footer').style.backgroundColor='#333333';
       document.body.style.backgroundColor='#212529';
 
-document.getElementById('inp1').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
-document.getElementById('inp2').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
-document.getElementById('navbar').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
-document.getElementById('footer').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
-document.getElementById('b1').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
-document.getElementById('b2').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
-document.body.style.filter="brightness(80%)"
+      document.getElementById('inp1').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+      document.getElementById('inp2').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+      document.getElementById('navbar').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+      document.getElementById('footer').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+      document.getElementById('b1').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+      document.getElementById('b2').style.boxShadow="#C68801 0px 50px 100px -20px, #C68801 0px 30px 60px -30px, #C68801 0px -2px 6px 0px inset "
+      document.body.style.filter="brightness(80%)"
 
     }
     else if(mode==='dark'){
       setMode('light');
+      localStorage.setItem("theme", false);
       document.body.style.backgroundColor='white';
       document.getElementById('inp1').style.backgroundColor='white';
       document.getElementById('inp2').style.backgroundColor='white';
       document.getElementById('navbar').style.backgroundColor='#8250DF';
       document.getElementById('footer').style.backgroundColor='#8250DF';
-
+      document.getElementById('inp1').style.color = 'black';
+      document.getElementById('inp2').style.color = 'black';
       document.getElementById('inp1').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
       document.getElementById('inp2').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
       document.getElementById('navbar').style.boxShadow="rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
@@ -207,6 +213,12 @@ document.body.style.filter="brightness(80%)"
     }
   }, [description]);
 
+  useEffect(() => {
+    if (darkTheme === "true") {
+      toggleMode();
+    }
+  }, []);
+  
   const location = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       setLatitude(position.coords.latitude);
