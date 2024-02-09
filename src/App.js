@@ -311,7 +311,7 @@ const App = () => {
       </div>
   }
       <ToastContainer/>
-      {temp ? <Footer /> : <Footer position="fixed" bottom="bottom-0" />}
+      <Footer />
     </div>
   );
 };
