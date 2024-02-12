@@ -1,8 +1,9 @@
-import React from "react";
-import daynight from './day-and-night.png'
-
+import React, { useState } from "react";
+import day from './day.png'
+import night from './night.png'
 
 const Navbar = (props) => {
+  const [nightMode ,setNightMode] = useState(true);
   return (
     
     <nav className={`navbar`} id="navbar" style={{ backgroundColor: "#8250DF" }}>
@@ -13,9 +14,12 @@ const Navbar = (props) => {
         >
           tru Weather
         </span>
-        <div className="form-check form-switch">
+        <div className="form-check form-switch" onClick={() => setNightMode(!nightMode)}>
           {/* <input className="form-check-input" onClick={props.toggleMode} type="checkbox" role="switch" id="flexSwitchCheckDefault" /> */}
-          <img src={daynight} onClick={props.toggleMode} className="mx-2" style={{ width: '40px', cursor: 'pointer' ,  filter: 'drop-shadow(rgb(34, 34, 34) 1px 2px 4px)' }} alt="" />
+          {
+            nightMode ? <img src={day} onClick={props.toggleMode} className="mx-2" style={{ width: '30px', cursor: 'pointer' }} alt="" /> :
+            <img src={night} onClick={props.toggleMode} className="mx-2 bg-white p-2 rounded-sm" style={{ width: '40px', cursor: 'pointer' }} alt="" />
+          }
           {/* <label className="form-check-label" htmlFor="flexSwitchCheckDefault" style={{ color: 'white' }} id="toggle-label" >Enable Dark Mode</label> */}
 
         </div>
