@@ -5,11 +5,37 @@ import { IoIosWater } from "react-icons/io";
 import { BsWind, BsThermometerHalf } from "react-icons/bs";
 import { BiMap } from "react-icons/bi";
 import { FaSun } from "react-icons/fa";
-import {toast, ToastContainer} from "react-toastify"
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./footer";
 import Navbar from './Navbar';
 
+// WeatherCard component
+const WeatherCard = ({ temp, humidity, description, name, windspeed }) => {
+  return (
+    <div className="flex items-center justify-center mt-5">
+      <div className="bg-blue-500 p-6 rounded-lg shadow-md text-white">
+        <p className="flex items-center">
+          <BsThermometerHalf size={30} className="me-3" /> {temp} °C
+        </p>
+        <p className="flex items-center">
+          <IoIosWater size={30} className="me-3" /> {humidity} %
+        </p>
+        <p className="flex items-center">
+          <FaSun size={30} className="me-3" /> {description}
+        </p>
+        <p className="flex items-center">
+          <BiMap size={30} className="me-3" /> {name}
+        </p>
+        <p className="flex items-center">
+          <BsWind size={30} className="me-3" /> {windspeed} Km/h
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// App component
 const App = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
@@ -100,6 +126,24 @@ const App = () => {
     }
 
   const callbylatlon = async () => {
+
+    try {
+      if (latitude.length !== 0 && longitude.length !== 0) {
+        const { data } = await Axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
+        );
+        console.log("API Response by LatLon:", data);
+        toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
+        setDatas(data);
+      } else {
+        toast.warn("Please Give location premission", { theme: "dark" });
+      }
+    } catch (error) {
+      console.error("Error in callbylatlon:", error);
+      toast.error("ERROR: Unable to fetch weather data. Please try again.", {
+        theme: "dark",
+      });
+
     if(latitude.length !== 0 && longitude.length !== 0){
       await Axios.get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
@@ -118,10 +162,31 @@ const App = () => {
 
     } else{
       return toast.warn("Please Give location premission", { theme: "dark" });
+
     }
   };
 
   const callbyname = async () => {
+
+    try {
+      if (city.length !== 0 && country.length !== 0) {
+        const { data } = await Axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
+        );
+        console.log("API Response by Name:", data);
+        toast.success("SUCCESSFULLY Fetched weather", { theme: "dark" });
+        setDatas(data);
+        setCity("");
+        setCountry("");
+      } else {
+        toast.warn("Please Enter Details !!", { theme: "dark" });
+      }
+    } catch (error) {
+      console.error("Error in callbyname:", error);
+      toast.error("ERROR: Unable to fetch weather data. Please try again.", {
+        theme: "dark",
+      });
+
     if (city.length !== 0 && country.length !== 0) {
       await Axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=a9553eeffc4cfe23a2011d3fb64edc72`
@@ -158,7 +223,7 @@ const App = () => {
         document.body.style.backgroundSize='cover';
 
     } else{
-      return toast.warn("Please Enter Details !!",{theme: "dark"});
+
     }
   };
 
@@ -239,6 +304,7 @@ const App = () => {
       setWindspeed(datas.wind?.speed);
     }
   }, [datas]);
+
   return (
     <div className="w-full min-h-screen overflow-hidden">
       {/* <div className="bg-black text-white p-3 lg:text-xl"> tru Weather</div> */}
@@ -291,6 +357,10 @@ const App = () => {
           Get Tru Weather By Current Location
         </button>
       </div>
+
+      {temp && <WeatherCard temp={temp} humidity={humidity} description={description} name={name} windspeed={windspeed} />}
+      <ToastContainer />
+
   {!!temp &&
       <div className="block w-9/12 p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto mt-5 d-flex flex-column justify-center items-center sm:w-6/12 md:w-4/12 lg:w-3/12 mb-5">
         <p className="d-flex flex-row">
@@ -312,6 +382,7 @@ const App = () => {
   }
       <ToastContainer/>
       <Footer />
+
     </div>
   );
 };
